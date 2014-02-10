@@ -4,11 +4,7 @@
 	/*
 		Set users' dir.
 	*/
-	if( is_dir ( '/home/garoe/gcs_contents/' ) ){
-		$users_dir = '/home/garoe/gcs_contents/';
-	}else{
-		$users_dir = '/home/moises/gcs_contents/';
-	}
+	$users_dir = ~~USERS_DIR~~;
  	
 
 	/*
@@ -18,7 +14,7 @@
 	*/
 	function ConnectToDB ()
 	{
-		$db_connection = mysql_connect("localhost", "root", "");
+		$db_connection = mysql_connect("localhost", "~~DB_USER_NAME~~", "~~DB_USER_PASSWORD~~");
 		if( !$db_connection ){ 
 			die( 'ERROR when trying to connect to DB' );
 		}
