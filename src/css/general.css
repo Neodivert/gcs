@@ -1,0 +1,67 @@
+
+body
+{
+	background-color:#EFFBFB;
+}
+
+#background
+{
+	background-color:#F7F8E0;
+	position:absolute; 
+
+	top:2%;
+	height:96%;  
+	left:2%;
+	width:96%;
+
+	border-style:solid;
+	border-width:1px;
+	border-color:#0B4C5F;
+}
+
+#mainPanel
+{
+	background-color:#F2F5A9;
+
+	margin:0.5%;
+	width:77%;
+	height:98%;	
+
+	float:left;
+
+	border-style:solid;
+	border-width:1px;
+	border-color:#0B4C5F;
+}
+
+#menu
+{
+	background-color:#F7D358;
+
+	margin:0.5%;
+	height:98%;
+	width:20%;
+
+	border-style:solid;
+	border-width:1px;
+	border-color:#0B4C5F;
+	
+	border-style:dashed;
+	border-color:#61380B;
+	border-width:1px;
+
+	float:left;
+}
+
+.fileEditor
+{
+  min-height: 200px;
+  max-height: 450px;
+  max-width: 100%;
+}
+
+.centerText
+{
+	text-align:center;
+}
+.
