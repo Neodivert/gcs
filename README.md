@@ -18,7 +18,7 @@ GCS also needs the following packets (found in the repositories for Ubuntu) for 
 * mingw-w64-x86-64 : Cross-compiling to Windows (64 bits)
 
 
-## Instalation (localhost)
+## Automatic instalation (localhost)
 
 * Clone this repository.
 ```

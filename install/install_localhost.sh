@@ -3,14 +3,9 @@
 # Default configuration
 ###############################################################################
 declare -A default_config
-default_config[XAMPP_DIRECTORY]="/opt/lampp"
-default_config[WEB_NAME]="gcs"
-default_config[DB_NAME]="db_gcs"
-default_config[DB_USER_NAME]="db_gcs"
+
 default_config[BD_USER_PASSWORD]="1234"
 default_config[MYSQL_PASSWORD]=""
-
-declare -A config
 
 
 # Auxiliar functions
@@ -30,96 +25,93 @@ function remove_last_slash(){
 }
 
 
-# Instalation configuration
+# Step 0: Check if we have root privileges.
 ###############################################################################
 
-# Ask the user where is XAMPP installed.
-read -e -p "Write the path where XAMPP is installed: " -i "${default_config[XAMPP_DIRECTORY]}" config[XAMPP_DIRECTORY]
+if [ "$(whoami)" != "root" ]; then
+	printf "ERROR: This command must be run with sudo\n" 1>&2
+	exit 1
+fi
+
+
+# Step 1: Load configuration file.
+###############################################################################
+
+# Load configuration file.
+source config.cfg
 
 # If the given path contains a "/" at the end, remove it.
-config[XAMPP_DIRECTORY]=`remove_last_slash "${config[XAMPP_DIRECTORY]}"`
+XAMPP_DIRECTORY=`remove_last_slash "$XAMPP_DIRECTORY"`
 
-# Check if given directory exits.
-if [ ! -d "${config[XAMPP_DIRECTORY]}" ]; then
-	printf "ERROR: directory [%s] not found\n" "${config[XAMPP_DIRECTORY]}" 1>&2
-	exit -1
-fi
+# Construct the web path.
+WEB_PATH="${XAMPP_DIRECTORY}/htdocs/${WEB_NAME}"
 
-# Check if given directory contains "lampp" executable.
-if [ ! -f "${config[XAMPP_DIRECTORY]}/lampp" ]; then
-	printf "ERROR: executable [%s] not found\n" "${config[XAMPP_DIRECTORY]}/lampp" 1>&2
-	exit -1
-fi
 
-printf "XAMPP found in [%s]\n" ${config[XAMPP_DIRECTORY]}
+# Step 2: Wait for user confirmation.
+###############################################################################
 
-# Ask the user for a name for the web.
-read -e -p "Write a name for the web: " -i "${default_config[WEB_NAME]}" config[WEB_NAME]
-
-# Check if web path isn't already in use.
-config[WEB_PATH]="${config[XAMPP_DIRECTORY]}/htdocs/${config[WEB_NAME]}"
-if [ -d "${config[WEB_PATH]}" ]; then
-	printf "ERROR: web path [%s] already in use\n" "${config[WEB_PATH]}" 1>&2
-	exit -1
-fi
-
-# Ask the user for a name for the database.
-read -e -p "Write a name for the GCS database: " -i "${default_config[DB_NAME]}" config[DB_NAME]
-
-# Ask the user for a name for the database user.
-read -e -p "Write a name for the GCS database user: " -i "${default_config[DB_USER_NAME]}" config[DB_USER_NAME]
-
-# Ask the user for a password for the database user.
-read -e -s -p "Write a password for the GCS database user: " -i "${default_config[DB_USER_PASSWORD]}" config[DB_USER_PASSWORD]
-echo
-
-# TODO: Allow user to change user_directory (GCS).
-
+# Tell the user the steps that this instalation script will perform.
 printf "The instalation script will perform the following steps: \n";
-printf "* Copying web data to [%s]\n" "${config[WEB_PATH]}"
-printf "* Creating mysql database [%s]\n" "${config[DB_NAME]}"
-printf "* Creating mysql user [%s]\n" "${config[DB_USER_NAME]}"
-printf "* Restart XAMPP\n\n"
+printf "* Copying web data to [%s]\n" "${WEB_PATH}"
+printf "* Creating mysql database [%s]\n" "${DB_NAME}"
+printf "* Creating mysql user [%s]\n" "${DB_USER_NAME}"
+printf "* Restarting XAMPP\n\n"
 
-
-# Install?
+# Ask user for permission.
 read -p "Install? (y/n): " -n 1 -r
 
 # Exit if user didn't give us confirmation.
 echo # Move to a new line
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
-	printf "Install script exited by user\n"
-	exit -1
+	printf "Install script exited by user\n\n"
+	exit 1
+fi
+
+
+# Step 3: Check if XAMPP is installed where the user said.
+###############################################################################
+
+# Check if XAMPP directory exists.
+if [ ! -d "${XAMPP_DIRECTORY}" ]; then
+	printf "ERROR: directory [%s] not found\n" "${XAMPP_DIRECTORY}" 1>&2
+	exit 1
+fi
+
+# Check if XAMPP directory contains "lampp" executable.
+if [ ! -f "${XAMPP_DIRECTORY}/lampp" ]; then
+	printf "ERROR: executable [%s] not found\n" "${XAMPP_DIRECTORY}/lampp" 1>&2
+	exit 1
+fi
+
+printf "XAMPP found in [%s]\n" ${XAMPP_DIRECTORY}
+
+
+# Step 4: Check if given web path isn't already in use.
+###############################################################################
+
+# Check if web path isn't already in use.
+if [ -d "${WEB_PATH}" ]; then
+	printf "ERROR: web path [%s] already in use\n" "${WEB_PATH}" 1>&2
+	exit 1
 fi
 
 
 # Instalation
 ###############################################################################
 
-printf "Copying web content to [%s] ...\n" "${config[WEB_PATH]}"
-sudo cp -r "../web" "${config[WEB_PATH]}"
-printf "Copying web content to [%s] ...OK\n" "${config[WEB_PATH]}"
+printf "Copying web content to [%s] ...\n" "${WEB_PATH}"
+sudo cp -r "../web" "${WEB_PATH}"
+printf "Copying web content to [%s] ...OK\n" "${WEB_PATH}"
 
-config[USERS_DIRS]="'users_dirs'"
-utilities_file="${config[WEB_PATH]}/php_html/scripts/utilities.php"
+utilities_file="${WEB_PATH}/php_html/scripts/utilities.php"
 printf "utilities_file: [%s]\n" "$utilities_file"
 
 printf "Personalizing web configuration ...\n"
-sudo sed -i "s/~~DB_USER_NAME~~/${config[DB_USER_NAME]}/g" "$utilities_file"
-sudo sed -i "s/~~DB_USER_PASSWORD~~/${config[DB_USER_PASSWORD]}/g" "$utilities_file"
-sudo sed -i "s/~~USERS_DIR~~/${config[USERS_DIRS]}/g" "$utilities_file"
+sudo sed -i "s/~~DB_USER_NAME~~/${DB_USER_NAME}/g" "$utilities_file"
+sudo sed -i "s/~~DB_USER_PASSWORD~~/${DB_USER_PASSWORD}/g" "$utilities_file"
+sudo sed -i "s/~~USERS_DIR~~/${USERS_DIRS}/g" "$utilities_file"
 printf "Personalizing web configuration ...OK\n"
-
-#echo sudo sed -e "s|**DB_USER_PASSWORD**|${config[DB_USER_PASSWORD]}|g" "$utilities_file"
-#
-#echo "2"
-
-#echo sudo sed -e "s|**DB_USERS_DIR**|${config[DB_USERS_DIR]}|g" "$utilities_file"
-#sudo sed -e "s|**DB_USERS_DIR**|${config[DB_USERS_DIR]}|g" "$utilities_file"
-#echo "3"
-
-
 
 
 # Database instalation
@@ -127,35 +119,40 @@ printf "Personalizing web configuration ...OK\n"
 
 # Start XAMP
 printf "Restarting XAMPP ...\n"
-sudo ${config[XAMPP_DIRECTORY]}/lampp restart
+sudo ${XAMPP_DIRECTORY}/lampp restart
 printf "Restarting XAMPP ...OK\n"
 
-mysql="${config[XAMPP_DIRECTORY]}/bin/mysql"
+# Get mysql command's path
+mysql="${XAMPP_DIRECTORY}/bin/mysql"
 
 # Ask the user for him/her administrative MySQL password.
-read -e -s -p "Write your database administrative password (Used for login in phpmyadmin): " -i "${default_config[MYSQL_PASSWORD]}" config[MYSQL_PASSWORD]
+read -e -s -p "Write your database administrative password (Used for login in phpmyadmin): " -i "${default_config[MYSQL_PASSWORD]}" MYSQL_PASSWORD
+echo
+
+# Ask the user for a password for the database user.
+read -e -s -p "Write a password for the GCS database user: " -i "${default_config[DB_USER_PASSWORD]}" DB_USER_PASSWORD
 echo
 
 # Create the database
-printf "Creating database [%s] ...\n" "${config[DB_NAME]}"
-"$mysql" -u root --password="${config[MYSQL_PASSWORD]}" -e "create database ${config[DB_NAME]}"
-printf "Creating database [%s] ...OK\n" "${config[DB_NAME]}"
+printf "Creating database [%s] ...\n" "${DB_NAME}"
+"$mysql" -u root --password="${MYSQL_PASSWORD}" -e "create database ${DB_NAME}"
+printf "Creating database [%s] ...OK\n" "${DB_NAME}"
 
 # Import the database structure from file ../bd/bd-gcs.sql.
 printf "Importing database structure from file ...\n"
-"$mysql" -u root --password="${config[MYSQL_PASSWORD]}" "${config[DB_NAME]}" < ../bd/bd_gcs.sql
+"$mysql" -u root --password="${MYSQL_PASSWORD}" "${DB_NAME}" < ../bd/bd_gcs.sql
 printf "Importing database structure from file ...OK\n"
 
 # Create the database user.
-printf "Creating mysql user [%s] ...\n" "${config[DB_USER_NAME]}"
-"$mysql" -u root --password="${config[MYSQL_PASSWORD]}" -e "CREATE USER '${config[DB_USER_NAME]}'@'localhost' IDENTIFIED BY '${config[DB_USER_PASSWORD]}';"
-printf "Creating mysql user [%s] ...OK\n" "${config[DB_USER_NAME]}"
+printf "Creating mysql user [%s] ...\n" "${DB_USER_NAME}"
+"$mysql" -u root --password="${MYSQL_PASSWORD}" -e "CREATE USER '${DB_USER_NAME}'@'localhost' IDENTIFIED BY '${DB_USER_PASSWORD}';"
+printf "Creating mysql user [%s] ...OK\n" "${DB_USER_NAME}"
 
 # Allow the created user to perfom SELECT on the database.
-printf "Giving SELECT privileges to user [%s] ...\n" "${config[DB_USER_NAME]}"
-$mysql -u root --password="${config[MYSQL_PASSWORD]}" -e "GRANT SELECT ON ${config[DB_NAME]}.* TO '${config[DB_USER_NAME]}'@'localhost';"
-"$mysql" -u root --password="${config[MYSQL_PASSWORD]}" -e "FLUSH PRIVILEGES;"
-printf "Giving SELECT privileges to user [%s] ...OK\n" "${config[DB_USER_NAME]}"
+printf "Giving SELECT privileges to user [%s] ...\n" "${DB_USER_NAME}"
+$mysql -u root --password="${MYSQL_PASSWORD}" -e "GRANT SELECT ON ${DB_NAME}.* TO '${DB_USER_NAME}'@'localhost';"
+"$mysql" -u root --password="${MYSQL_PASSWORD}" -e "FLUSH PRIVILEGES;"
+printf "Giving SELECT privileges to user [%s] ...OK\n" "${DB_USER_NAME}"
 
 
 # References
@@ -175,4 +172,9 @@ printf "Giving SELECT privileges to user [%s] ...OK\n" "${config[DB_USER_NAME]}"
 # sed doesn't accept $variable in bash script - LinuxQuestions.org
 # http://www.linuxquestions.org/questions/programming-9/sed-doesn%27t-accept-$variable-in-bash-script-325935/
 # 
+# Bash: Check if sudo - Ubuntu forums
+# http://ubuntuforums.org/showthread.php?t=479255
+#
+# Config files for your script - Bash Hackers Wiki
+# http://wiki.bash-hackers.org/howto/conffile
 ###############################################################################
