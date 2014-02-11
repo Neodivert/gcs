@@ -116,12 +116,15 @@ mysql="${XAMPP_DIRECTORY}/bin/mysql"
 # TODO: -qfsBe?
 if [[ ! -z "`$mysql -u root --password="${MYSQL_PASSWORD}" -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$DB_NAME'" 2>&1`" ]];
 then
-	printf "ERROR: database [%s] ALREADY EXISTS\n" $DB_NAME 1>&2
+	printf "ERROR: database [%s] already exists\n" $DB_NAME 1>&2
 	exit 1
 fi
 
-
 # Check if a MySQL user with the given name already exists.
+if [[ ! -z "`$mysql -u root --password=${MYSQL_PASSWORD} -e "SELECT 1 FROM mysql.user WHERE user = '$DB_USER_NAME'" 2>&1`" ]] ;then
+	printf "ERROR: MySQL user [%s] already exists\n" $DB_USER_NAME 1>&2
+	exit 1
+fi
 
 # TODO: Remove
 exit 0
