@@ -97,6 +97,35 @@ if [ -d "${WEB_PATH}" ]; then
 fi
 
 
+# Step 5: Start XAMPP
+###############################################################################
+
+printf "Restarting XAMPP ...\n"
+sudo ${XAMPP_DIRECTORY}/lampp restart
+printf "Restarting XAMPP ...OK\n"
+
+# Get mysql command's path
+mysql="${XAMPP_DIRECTORY}/bin/mysql"
+
+
+# Step 6: Check if a MYSQL database and/or user with the given names already 
+# exist.
+###############################################################################
+
+# Check if a MySQL database with the given name already exists.
+# TODO: -qfsBe?
+if [[ ! -z "`$mysql -u root --password="${MYSQL_PASSWORD}" -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$DB_NAME'" 2>&1`" ]];
+then
+	printf "ERROR: database [%s] ALREADY EXISTS\n" $DB_NAME 1>&2
+	exit 1
+fi
+
+
+# Check if a MySQL user with the given name already exists.
+
+# TODO: Remove
+exit 0
+
 # Instalation
 ###############################################################################
 
@@ -116,14 +145,6 @@ printf "Personalizing web configuration ...OK\n"
 
 # Database instalation
 ###############################################################################
-
-# Start XAMP
-printf "Restarting XAMPP ...\n"
-sudo ${XAMPP_DIRECTORY}/lampp restart
-printf "Restarting XAMPP ...OK\n"
-
-# Get mysql command's path
-mysql="${XAMPP_DIRECTORY}/bin/mysql"
 
 # Ask the user for him/her administrative MySQL password.
 read -e -s -p "Write your database administrative password (Used for login in phpmyadmin): " -i "${default_config[MYSQL_PASSWORD]}" MYSQL_PASSWORD
@@ -149,8 +170,10 @@ printf "Creating mysql user [%s] ...\n" "${DB_USER_NAME}"
 printf "Creating mysql user [%s] ...OK\n" "${DB_USER_NAME}"
 
 # Allow the created user to perfom SELECT on the database.
-printf "Giving SELECT privileges to user [%s] ...\n" "${DB_USER_NAME}"
-$mysql -u root --password="${MYSQL_PASSWORD}" -e "GRANT SELECT ON ${DB_NAME}.* TO '${DB_USER_NAME}'@'localhost';"
+BD_USER_PRIVILEGES="GRANT DELETE,INSERT,SELECT,UPDATE"
+
+printf "Giving [%] privileges to user [%s] ...\n" "${BD_USER_PRIVILEGES}" "${DB_USER_NAME}"
+$mysql -u root --password="${MYSQL_PASSWORD}" -e "GRANT ${DB_USER_PRIVILEGES} ON ${DB_NAME}.* TO '${DB_USER_NAME}'@'localhost';"
 "$mysql" -u root --password="${MYSQL_PASSWORD}" -e "FLUSH PRIVILEGES;"
 printf "Giving SELECT privileges to user [%s] ...OK\n" "${DB_USER_NAME}"
 
@@ -177,4 +200,13 @@ printf "Giving SELECT privileges to user [%s] ...OK\n" "${DB_USER_NAME}"
 #
 # Config files for your script - Bash Hackers Wiki
 # http://wiki.bash-hackers.org/howto/conffile
+#
+# How to check if mysql database exists - Stack Overflow
+# http://stackoverflow.com/questions/838978/how-to-check-if-mysql-database-exists
+#
+# Sintaxis de GRANT y REVOKE - MySQL 5.0 Reference Manual
+# https://dev.mysql.com/doc/refman/5.0/es/grant.html
+#
+# What does -z mean in Bash? - Stack Overflow
+# http://stackoverflow.com/questions/18096670/what-does-z-mean-in-bash
 ###############################################################################
