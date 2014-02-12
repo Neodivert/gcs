@@ -113,7 +113,6 @@ mysql="${XAMPP_DIRECTORY}/bin/mysql"
 ###############################################################################
 
 # Check if a MySQL database with the given name already exists.
-# TODO: -qfsBe?
 if [[ ! -z "`$mysql -u root --password="${MYSQL_PASSWORD}" -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$DB_NAME'" 2>&1`" ]];
 then
 	printf "ERROR: database [%s] already exists\n" $DB_NAME 1>&2
@@ -126,9 +125,6 @@ if [[ ! -z "`$mysql -u root --password=${MYSQL_PASSWORD} -e "SELECT 1 FROM mysql
 	exit 1
 fi
 
-# TODO: Remove
-exit 0
-
 # Instalation
 ###############################################################################
 
@@ -140,9 +136,10 @@ utilities_file="${WEB_PATH}/php_html/scripts/utilities.php"
 printf "utilities_file: [%s]\n" "$utilities_file"
 
 printf "Personalizing web configuration ...\n"
-sudo sed -i "s/~~DB_USER_NAME~~/${DB_USER_NAME}/g" "$utilities_file"
-sudo sed -i "s/~~DB_USER_PASSWORD~~/${DB_USER_PASSWORD}/g" "$utilities_file"
-sudo sed -i "s/~~USERS_DIR~~/${USERS_DIRS}/g" "$utilities_file"
+sudo sed -i "s/~~DB_USER_NAME~~/'${DB_USER_NAME}'/g" "$utilities_file"
+sudo sed -i "s/~~DB_USER_PASSWORD~~/'${DB_USER_PASSWORD}'/g" "$utilities_file"
+sudo sed -i "s/~~USERS_DIR~~/'${USERS_DIRS}'/g" "$utilities_file"
+sudo sed -i "s/~~DB_NAME~~/'${DB_NAME}'/g" "$utilities_file"
 printf "Personalizing web configuration ...OK\n"
 
 
@@ -173,12 +170,15 @@ printf "Creating mysql user [%s] ...\n" "${DB_USER_NAME}"
 printf "Creating mysql user [%s] ...OK\n" "${DB_USER_NAME}"
 
 # Allow the created user to perfom SELECT on the database.
-BD_USER_PRIVILEGES="GRANT DELETE,INSERT,SELECT,UPDATE"
+BD_USER_PRIVILEGES="DELETE, INSERT, SELECT, UPDATE"
 
-printf "Giving [%] privileges to user [%s] ...\n" "${BD_USER_PRIVILEGES}" "${DB_USER_NAME}"
+printf "Giving [%s] privileges to user [%s] ...\n" "${BD_USER_PRIVILEGES}" "${DB_USER_NAME}"
 $mysql -u root --password="${MYSQL_PASSWORD}" -e "GRANT ${DB_USER_PRIVILEGES} ON ${DB_NAME}.* TO '${DB_USER_NAME}'@'localhost';"
 "$mysql" -u root --password="${MYSQL_PASSWORD}" -e "FLUSH PRIVILEGES;"
-printf "Giving SELECT privileges to user [%s] ...OK\n" "${DB_USER_NAME}"
+printf "Giving [%s] privileges to user [%s] ...OK\n" "${BD_USER_PRIVILEGES}" "${DB_USER_NAME}"
+
+printf "Install finished. Now you can visit \"localhost/$WEB_NAME\n\""
+exit 0
 
 
 # References
@@ -212,4 +212,10 @@ printf "Giving SELECT privileges to user [%s] ...OK\n" "${DB_USER_NAME}"
 #
 # What does -z mean in Bash? - Stack Overflow
 # http://stackoverflow.com/questions/18096670/what-does-z-mean-in-bash
+#
+# Checking if mysql user exists - Stack Overflow
+# http://stackoverflow.com/questions/3049929/checking-if-mysql-user-exists
+#
+# How to Use MySQL GRANT to Grant Privileges to Account - MySQL tutorial
+# http://www.mysqltutorial.org/mysql-grant.aspx
 ###############################################################################
