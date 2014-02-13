@@ -92,9 +92,26 @@ printf "Deleting MySQL database [%s] ...\n" "${DB_NAME}"
 "$mysql" -u root --password="${MYSQL_PASSWORD}" -e "DROP DATABASE $DB_NAME;"
 printf "Deleting MySQL database [%s] ...OK\n" "${DB_NAME}"
 
-# TODO: ¿Hacer que el directorio de los usuarios sea fijo (instalador) y que el desinstalador
-# haga copia de seguridad del mismo en el directorio actual?
-# TODO: ¿Hacer que el desinstalador elimine $WEB_PATH/css/*.css, $WEB_PATH/js/*.js, etc?
+# Delete users dir.
+printf "Deleting users dir [%s] ...\n" "${USERS_DIR}"
+current_date=`date +%d_%m_%Y`
+users_dir_backup="backup_gcs_users_dir_$current_date.zip"
+zip -r $users_dir_backup $USERS_DIR
+printf "Users dir backup saved in [%s]" $users_dir_backup
+rm -r $USERS_DIR
+printf "Deleting users dir [%s] ...OK\n" "${USERS_DIR}"
+
+# Delete web path.
+printf "Deleting web path [%s] ...\n" $WEB_PATH
+rm -r $WEB_PATH
+printf "Deleting web path [%s] ...OK\n" $WEB_PATH
+
+
+# Step 6: Done!
+###############################################################################
+
+printf "GCS uninstall script has finished\n\n"
+
 
 # Reference
 ###############################################################################

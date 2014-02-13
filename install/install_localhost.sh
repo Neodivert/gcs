@@ -56,6 +56,7 @@ printf "* Copying web data to [%s]\n" "${WEB_PATH}"
 printf "* Creating mysql database [%s]\n" "${DB_NAME}"
 printf "* Creating mysql user [%s]\n" "${DB_USER_NAME}"
 printf "* Restarting XAMPP\n\n"
+printf "If you want to change any configuration, exit this install and edit the file \"config.cfg\" before trying again.\n\n"
 
 # Ask user for permission.
 read -p "Install? (y/n): " -n 1 -r
