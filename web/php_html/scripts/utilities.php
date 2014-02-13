@@ -5,11 +5,8 @@
 		Configuration parameters
 	*/
 	$users_dir = ~~USERS_DIR~~;
-	$db_name = ~~DB_NAME~~;
-	$db_user_name = ~~DB_USER_NAME~~;
-	$db_user_password = ~~DB_USER_PASSWORD~~;
+	
 
- 	
 	/*
 		ConnectToDB: Try to connect to "gcs" db on localhost.
 	  	Returns a MySQL link identifier on success, or kills the execution
@@ -17,12 +14,18 @@
 	*/
 	function ConnectToDB ()
 	{
+		// DB connection parameters
+		$db_name = ~~DB_NAME~~;
+		$db_user_name = ~~DB_USER_NAME~~;
+		$db_user_password = ~~DB_USER_PASSWORD~~;
+
+		// Connect to the database server
 		$db_connection = mysql_connect("localhost", $db_user_name, $db_user_password );
 		if( !$db_connection ){ 
 			die( 'ERROR when trying to connect to DB' );
 		}
 
-
+		// Select the GCS database.
 		if( !mysql_select_db( $db_name ) ){
 			mysql_close( $db_connection );
 			die( 'ERROR when trying to select DB' );
