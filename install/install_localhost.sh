@@ -4,7 +4,7 @@
 ###############################################################################
 declare -A default_config
 
-default_config[BD_USER_PASSWORD]="1234"
+default_config[DB_USER_PASSWORD]="1234"
 default_config[MYSQL_PASSWORD]=""
 
 
@@ -126,25 +126,8 @@ if [[ ! -z "`$mysql -u root --password=${MYSQL_PASSWORD} -e "SELECT 1 FROM mysql
 	exit 1
 fi
 
-# Instalation
-###############################################################################
 
-printf "Copying web content to [%s] ...\n" "${WEB_PATH}"
-sudo cp -r "../web" "${WEB_PATH}"
-printf "Copying web content to [%s] ...OK\n" "${WEB_PATH}"
-
-utilities_file="${WEB_PATH}/php_html/scripts/utilities.php"
-printf "utilities_file: [%s]\n" "$utilities_file"
-
-printf "Personalizing web configuration ...\n"
-sudo sed -i "s/~~DB_USER_NAME~~/'${DB_USER_NAME}'/g" "$utilities_file"
-sudo sed -i "s/~~DB_USER_PASSWORD~~/'${DB_USER_PASSWORD}'/g" "$utilities_file"
-sudo sed -i "s/~~USERS_DIR~~/'${USERS_DIRS}'/g" "$utilities_file"
-sudo sed -i "s/~~DB_NAME~~/'${DB_NAME}'/g" "$utilities_file"
-printf "Personalizing web configuration ...OK\n"
-
-
-# Database instalation
+# Step 7: Database instalation
 ###############################################################################
 
 # Ask the user for him/her administrative MySQL password.
@@ -152,7 +135,7 @@ read -e -s -p "Write your database administrative password (Used for login in ph
 echo
 
 # Ask the user for a password for the database user.
-read -e -s -p "Write a password for the GCS database user: " -i "${default_config[DB_USER_PASSWORD]}" DB_USER_PASSWORD
+read -e -s -p "Write a password for the GCS database user: " DB_USER_PASSWORD
 echo
 
 # Create the database
@@ -177,6 +160,28 @@ printf "Giving [%s] privileges to user [%s] ...\n" "${DB_USER_PRIVILEGES}" "${DB
 $mysql -u root --password="${MYSQL_PASSWORD}" -e "GRANT ${DB_USER_PRIVILEGES} ON ${DB_NAME}.* TO '${DB_USER_NAME}'@'localhost';"
 "$mysql" -u root --password="${MYSQL_PASSWORD}" -e "FLUSH PRIVILEGES;"
 printf "Giving [%s] privileges to user [%s] ...OK\n" "${DB_USER_PRIVILEGES}" "${DB_USER_NAME}"
+
+
+# Step 8: Directory instalation
+###############################################################################
+
+printf "Copying web content to [%s] ...\n" "${WEB_PATH}"
+sudo cp -r "../web" "${WEB_PATH}"
+printf "Copying web content to [%s] ...OK\n" "${WEB_PATH}"
+
+utilities_file="${WEB_PATH}/php_html/scripts/utilities.php"
+printf "utilities_file: [%s]\n" "$utilities_file"
+
+printf "Personalizing web configuration ...\n"
+sudo sed -i "s/~~DB_USER_NAME~~/'${DB_USER_NAME}'/g" "$utilities_file"
+sudo sed -i "s/~~DB_USER_PASSWORD~~/'${DB_USER_PASSWORD}'/g" "$utilities_file"
+sudo sed -i "s/~~USERS_DIR~~/'${USERS_DIRS}'/g" "$utilities_file"
+sudo sed -i "s/~~DB_NAME~~/'${DB_NAME}'/g" "$utilities_file"
+printf "Personalizing web configuration ...OK\n"
+
+
+# Step 9: Done!
+###############################################################################
 
 printf "\n\nInstall finished. Now you can visit \"localhost/$WEB_NAME\"\n\n"
 exit 0
