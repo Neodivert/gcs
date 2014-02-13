@@ -171,14 +171,14 @@ printf "Creating mysql user [%s] ...\n" "${DB_USER_NAME}"
 printf "Creating mysql user [%s] ...OK\n" "${DB_USER_NAME}"
 
 # Allow the created user to perfom SELECT on the database.
-BD_USER_PRIVILEGES="DELETE, INSERT, SELECT, UPDATE"
+DB_USER_PRIVILEGES="DELETE, INSERT, SELECT, UPDATE"
 
-printf "Giving [%s] privileges to user [%s] ...\n" "${BD_USER_PRIVILEGES}" "${DB_USER_NAME}"
+printf "Giving [%s] privileges to user [%s] ...\n" "${DB_USER_PRIVILEGES}" "${DB_USER_NAME}"
 $mysql -u root --password="${MYSQL_PASSWORD}" -e "GRANT ${DB_USER_PRIVILEGES} ON ${DB_NAME}.* TO '${DB_USER_NAME}'@'localhost';"
 "$mysql" -u root --password="${MYSQL_PASSWORD}" -e "FLUSH PRIVILEGES;"
-printf "Giving [%s] privileges to user [%s] ...OK\n" "${BD_USER_PRIVILEGES}" "${DB_USER_NAME}"
+printf "Giving [%s] privileges to user [%s] ...OK\n" "${DB_USER_PRIVILEGES}" "${DB_USER_NAME}"
 
-printf "Install finished. Now you can visit \"localhost/$WEB_NAME\n\""
+printf "\n\nInstall finished. Now you can visit \"localhost/$WEB_NAME\"\n\n"
 exit 0
 
 

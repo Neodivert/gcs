@@ -58,7 +58,7 @@ printf "This uninstall script will perform the following actions: \n"
 printf " - Delete MySQL database [%s]\n" $DB_NAME
 printf " - Delete MySQL user [%s]\n" $DB_USER_NAME
 printf "	- DELETE USERS CONTENT DIRECTORY [%s]\n" $USERS_DIR
-printf "	- DELETE DIRECTORY [%s]\n" $WEB_PATH
+printf "	- DELETE DIRECTORY [%s]\n\n" $WEB_PATH
 
 # Ask user for permission.
 read -p "Install? (y/n): " -n 1 -r
@@ -94,10 +94,9 @@ printf "Deleting MySQL database [%s] ...OK\n" "${DB_NAME}"
 
 # Delete users dir.
 printf "Deleting users dir [%s] ...\n" "${USERS_DIR}"
-current_date=`date +%d_%m_%Y`
+current_date=`date +%H_%M_%S__%d_%m_%Y`
 users_dir_backup="backup_gcs_users_dir_$current_date.zip"
 zip -r $users_dir_backup $USERS_DIR
-printf "Users dir backup saved in [%s]" $users_dir_backup
 rm -r $USERS_DIR
 printf "Deleting users dir [%s] ...OK\n" "${USERS_DIR}"
 
@@ -110,6 +109,7 @@ printf "Deleting web path [%s] ...OK\n" $WEB_PATH
 # Step 6: Done!
 ###############################################################################
 
+printf "\n\nUsers dir backup saved in [%s]\n" $users_dir_backup
 printf "GCS uninstall script has finished\n\n"
 
 
