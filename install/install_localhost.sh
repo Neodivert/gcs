@@ -167,6 +167,8 @@ printf "Giving [%s] privileges to user [%s] ...OK\n" "${DB_USER_PRIVILEGES}" "${
 
 printf "Copying web content to [%s] ...\n" "${WEB_PATH}"
 sudo cp -r "../web" "${WEB_PATH}"
+sudo chown -R "$APACHE_USER" "${WEB_PATH}"
+sudo chmod -R 0755 "${WEB_PATH}"
 printf "Copying web content to [%s] ...OK\n" "${WEB_PATH}"
 
 utilities_file="${WEB_PATH}/php_html/scripts/utilities.php"
@@ -175,7 +177,6 @@ printf "utilities_file: [%s]\n" "$utilities_file"
 printf "Personalizing web configuration ...\n"
 sudo sed -i "s/~~DB_USER_NAME~~/'${DB_USER_NAME}'/g" "$utilities_file"
 sudo sed -i "s/~~DB_USER_PASSWORD~~/'${DB_USER_PASSWORD}'/g" "$utilities_file"
-sudo sed -i "s/~~USERS_DIR~~/'${USERS_DIRS}'/g" "$utilities_file"
 sudo sed -i "s/~~DB_NAME~~/'${DB_NAME}'/g" "$utilities_file"
 printf "Personalizing web configuration ...OK\n"
 
@@ -224,4 +225,7 @@ exit 0
 #
 # How to Use MySQL GRANT to Grant Privileges to Account - MySQL tutorial
 # http://www.mysqltutorial.org/mysql-grant.aspx
+#
+# PHP mkdir: Permission denied problem - Stack Overflow
+# http://stackoverflow.com/questions/5246114/php-mkdir-permission-denied-problem
 ###############################################################################

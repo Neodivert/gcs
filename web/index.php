@@ -7,7 +7,7 @@
 		// Try to login user.
 		if( LoginUser($_POST['loginUserName'], $_POST['loginUserPassword']) ){
 			// Login successful, go to html/main.php
-			header('Location: html/main.php');
+			header('Location: php_html/main.php');
 		}else{
 			// Error when loging, show a alert.
 			echo "<script language='JavaScript'>
@@ -19,7 +19,7 @@
 		// Try to create user   
 		if( CreateUser( $_POST['registerUserName'], $_POST['registerUserPassword'] )){
 			// Registration successful, go to html/main.php
-			header('Location: html/main.php');
+			header('Location: php_html/main.php');
 		}else{
 			// Error when registering, show a alert.
 			echo "<script language='JavaScript'>

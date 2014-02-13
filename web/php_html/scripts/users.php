@@ -37,6 +37,7 @@
 	function CreateUser ( $name, $password )
 	{
 		global $users_dir;
+		$user_dir = $users_dir . '/' . $name;
 		
 		$db_connection = ConnectToDB();
 
@@ -52,7 +53,7 @@
 		}
 
 		// Creates the user's dir.
-		$res = mkdir(  $users_dir . $name, 0777, true );
+		$res = mkdir(  $user_dir, 0755, false );
 
 		if( !$res ){
 			$error = error_get_last();
@@ -60,7 +61,7 @@
 		}
 
 		// Creates the user's bin dir.
-		$res = mkdir(  $users_dir . $name . '/.bin', 0777, true );
+		$res = mkdir(  $user_dir . '/.bin', 0755, false );
 
 		if( !$res ){
 			$error = error_get_last();

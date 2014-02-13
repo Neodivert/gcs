@@ -41,12 +41,8 @@ fi
 
 printf "Retrieving database info ...\n"
 
-USERS_DIR=`grep -o "users_dir *= *.*;.*" $UTILITIES_FILE | sed "s/.*'\(.*\)'.*/\1/g"`
 DB_NAME=`grep -o "db_name *= *.*;.*" $UTILITIES_FILE | sed "s/.*'\(.*\)'.*/\1/g"`
 DB_USER_NAME=`grep -o "db_user_name *= *.*;.*" $UTILITIES_FILE | sed "s/.*'\(.*\)'.*/\1/g"`
-
-# Get Users dir full path
-USERS_DIR="$WEB_PATH/$USERS_DIR"
 
 printf "Retrieving database info ...OK\n"
 
@@ -57,8 +53,7 @@ printf "Retrieving database info ...OK\n"
 printf "This uninstall script will perform the following actions: \n"
 printf " - Delete MySQL database [%s]\n" $DB_NAME
 printf " - Delete MySQL user [%s]\n" $DB_USER_NAME
-printf "	- DELETE USERS CONTENT DIRECTORY [%s]\n" $USERS_DIR
-printf "	- DELETE DIRECTORY [%s]\n\n" $WEB_PATH
+printf "	- DELETE ENTIRE DIRECTORY (INCLUDING USERS CONTENT DIRECTORY) [%s]\n\n" $WEB_PATH
 
 # Ask user for permission.
 read -p "Install? (y/n): " -n 1 -r
@@ -76,8 +71,13 @@ read -e -s -p "Write your database administrative password (Used for login in ph
 echo
 
 
-# Step 5: Wait for user confirmation.
+# Step 5: Database uninstall
 ###############################################################################
+
+# Restart XAMPP
+printf "Restarting XAMPP ...\n"
+sudo ${XAMPP_DIRECTORY}/lampp restart
+printf "Restarting XAMPP ...OK\n"
 
 # Get mysql command's path
 mysql="${XAMPP_DIRECTORY}/bin/mysql"
@@ -92,13 +92,13 @@ printf "Deleting MySQL database [%s] ...\n" "${DB_NAME}"
 "$mysql" -u root --password="${MYSQL_PASSWORD}" -e "DROP DATABASE $DB_NAME;"
 printf "Deleting MySQL database [%s] ...OK\n" "${DB_NAME}"
 
-# Delete users dir.
-printf "Deleting users dir [%s] ...\n" "${USERS_DIR}"
+# Backup users dir.
+USERS_DIR="$WEB_PATH/users_dirs"
+printf "Making a backup of users dir [%s] ...\n" "${USERS_DIR}"
 current_date=`date +%H_%M_%S__%d_%m_%Y`
 users_dir_backup="backup_gcs_users_dir_$current_date.zip"
 zip -r $users_dir_backup $USERS_DIR
-rm -r $USERS_DIR
-printf "Deleting users dir [%s] ...OK\n" "${USERS_DIR}"
+printf "Making a backup of users dir [%s] ...OK\n" "${USERS_DIR}"
 
 # Delete web path.
 printf "Deleting web path [%s] ...\n" $WEB_PATH

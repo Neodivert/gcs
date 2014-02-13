@@ -4,7 +4,7 @@
 	/*
 		Configuration parameters
 	*/
-	$users_dir = ~~USERS_DIR~~;
+	$users_dir = 'users_dirs';
 	
 
 	/*
