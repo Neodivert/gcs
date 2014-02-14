@@ -101,9 +101,9 @@ fi
 # Step 5: Start XAMPP
 ###############################################################################
 
-printf "Restarting XAMPP ...\n"
-sudo ${XAMPP_DIRECTORY}/lampp restart
-printf "Restarting XAMPP ...OK\n"
+printf "Starting MySQL ...\n"
+sudo ${XAMPP_DIRECTORY}/lampp startmysql
+printf "Starting MySQL ...OK\n"
 
 # Get mysql command's path
 mysql="${XAMPP_DIRECTORY}/bin/mysql"
@@ -171,7 +171,7 @@ sudo chown -R "$APACHE_USER" "${WEB_PATH}"
 sudo chmod -R 0755 "${WEB_PATH}"
 printf "Copying web content to [%s] ...OK\n" "${WEB_PATH}"
 
-utilities_file="${WEB_PATH}/php_html/scripts/utilities.php"
+utilities_file="${WEB_PATH}/php/utilities.php"
 printf "utilities_file: [%s]\n" "$utilities_file"
 
 printf "Personalizing web configuration ...\n"

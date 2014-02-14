@@ -1,11 +1,33 @@
 <!DOCTYPE html> 
 <?php
-	include_once "scripts/projects.php";
-	include_once "scripts/files.php";
+	include_once "php/projects.php";
+	include_once "php/files.php";
 
 	// Dont allow users who didnt login.
 	if( !isset( $_SESSION['name'] ) ){
 		die( 'ERROR: Debe logearse/registrarse para entrar en esta secci&oacute;n' );
+	}
+
+	/*******************************************
+	* Respond to POST Requests
+	*******************************************/
+	// The user wants to logout?
+	if( isset( $_POST['userAction'] ) ){
+		switch( $_POST['userAction'] ){
+			case 'deleteUser':
+				// Delete user from db and delete its dir.
+				DeleteUser( $_SESSION['name'] );
+			case 'logout':
+				// Unset session variables and go to '../index.php'.
+				unset( $_SESSION['name'] );
+				unset( $_SESSION['id'] );
+				unset( $_SESSION['dir'] );
+				header('Location: index.php');
+			break;
+			default:
+				die( 'ERROR: Requested a invalid user action' );
+			break;
+		}
 	}
 ?>
 
@@ -14,16 +36,16 @@
 	<head>
 		<title>GCS - Compilador Online</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link rel="stylesheet" type="text/css" href="../css/login.css" />
-		<link rel="stylesheet" type="text/css" href="../css/general.css" />
-		<link rel="stylesheet" type="text/css" href="../css/jquery-ui-1.10.4.custom.css" />
-   		<script type="text/javascript" src="../js/jquery-1.10.2.js"> </script>
-		<script type="text/javascript" src="../js/jquery-ui-1.10.4.custom.min.js"> </script>
-		<script type="text/javascript" src="../js/utilities.js"> </script>
-		<script type="text/javascript" src="../js/users.js"> </script>
-		<script type="text/javascript" src="../js/projects.js"> </script>
-		<script type="text/javascript" src="../js/files.js"> </script>
-		<script type="text/javascript" src="../js/md5.js"> </script>
+		<link rel="stylesheet" type="text/css" href="css/login.css" />
+		<link rel="stylesheet" type="text/css" href="css/general.css" />
+		<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.10.4.custom.css" />
+   		<script type="text/javascript" src="js/jquery-1.10.2.js"> </script>
+		<script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"> </script>
+		<script type="text/javascript" src="js/utilities.js"> </script>
+		<script type="text/javascript" src="js/users.js"> </script>
+		<script type="text/javascript" src="js/projects.js"> </script>
+		<script type="text/javascript" src="js/files.js"> </script>
+		<script type="text/javascript" src="js/md5.js"> </script>
 		<script type="text/javascript">
          		InitProjectsJQuery();
 				InitFilesJQuery();
@@ -41,12 +63,12 @@
 				<p>Bienvenido <?php echo $_SESSION['name'] . " (id: " . $_SESSION['id'] . ")"; ?> </p>
 				
 				<!-- Logout form -->
-				<form id="logoutForm" action="scripts/users.php" method="post">
+				<form id="logoutForm" action="main.php" method="post">
 					<input type="submit" name="userAction" value="logout" />
 				</form>
 
 				<!-- Delete user form -->
-				<form id="deleteUserForm" action="scripts/users.php" method="post">
+				<form id="deleteUserForm" action="main.php" method="post">
 					<input type="hidden" name="userAction" value="deleteUser" />
 					<?php
 					echo '<input type="button" name="userAction" value="Borrar usuario"';
@@ -86,7 +108,7 @@
 				<!-- Last compilation result -->
 				<div id="lastCompilation">
 					<h3 class="centerText">Ultima compilaci&oacute;n</h3>
-					<div id="lastCompilationResult"><?php GetLastExecutable($_SESSION['dir']) ?></div>
+					<div id="lastCompilationResult"><?php GetLastExecutable( $_SESSION['dir'] ) ?></div>
 				</div>
 			</div>
 		</div>

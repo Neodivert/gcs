@@ -1,13 +1,13 @@
 <!DOCTYPE html> 
 <?php
-	include_once "php_html/scripts/users.php";
+	include_once "php/users.php";
 
 	// Did the user try to login
 	if (isset($_POST['loginUserName']) && isset($_POST['loginUserPassword'])){    
 		// Try to login user.
 		if( LoginUser($_POST['loginUserName'], $_POST['loginUserPassword']) ){
 			// Login successful, go to html/main.php
-			header('Location: php_html/main.php');
+			header('Location: main.php');
 		}else{
 			// Error when loging, show a alert.
 			echo "<script language='JavaScript'>
@@ -18,8 +18,8 @@
 	}else if( isset($_POST['registerUserName']) && isset($_POST['registerUserPassword']) ){
 		// Try to create user   
 		if( CreateUser( $_POST['registerUserName'], $_POST['registerUserPassword'] )){
-			// Registration successful, go to html/main.php
-			header('Location: php_html/main.php');
+			// Registration successful, go to main.php
+			header('Location: main.php');
 		}else{
 			// Error when registering, show a alert.
 			echo "<script language='JavaScript'>

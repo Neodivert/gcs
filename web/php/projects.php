@@ -75,7 +75,7 @@
 		CreateButton( 'Borrar proyecto', $function );
 
 		// Iterate over and list the files in the project's dir.
-		$dir = opendir( $_SESSION['dir'] . $projectName );
+		$dir = opendir( $_SESSION['dir'] . '/' . $projectName );
 		if( $dir  ){
 			echo '<p>Lista de ficheros: </p><ul id="' . $projectName . '@filesList">';
 			$entry = readdir( $dir );
@@ -127,7 +127,7 @@
 			mysql_close( $db_connection );
 			
 			// Create the project's dir.
-			$res = mkdir(  $_SESSION['dir'] . $name, 0777, true );
+			$res = mkdir(  $_SESSION['dir'] . '/' . $name, 0777, true );
 
 			if( !$res ){
 				$error = error_get_last();
@@ -169,7 +169,7 @@
 		$sql = mysql_query("DELETE FROM openFiles WHERE ownerId={$_SESSION['id']} AND name LIKE '$projectName%'") or die(mysql_error());
 
 		//Remove project's dir.
-		DeleteDirectory( $users_dir . $_SESSION['name'] . '/' . $projectName );
+		DeleteDirectory( $users_dir . '/' . $_SESSION['name'] . '/' . $projectName );
 
 		mysql_close( $db_connection );
 	}
@@ -274,19 +274,19 @@
 			while( ($entry !== false) && ( ($entry == ".." ) || ($entry == "." ) ) ){
 				$entry = readdir( $dir );
 			}
+		
+			if( $entry ){
+				// We found the exec, set its download form.
+				$execFile = $user_dir . "/.bin/" . $entry;
+				$execFile = str_replace( "\ ", " ", $execFile );
+
+				echo '<form action="scripts/files.php" method="POST" >';
+				echo '<input type="hidden" name="fileName" value="' . $execFile . '" />';
+				echo '<input type="hidden" name="fileAction" value="downloadFile" />';
+				echo '<input type="submit" name="submit" value="Descargar ejecutable (' . $entry . ')" />';
+				echo '</form>';
+			}	
 		}
-
-		if( $entry ){
-			// We found the exec, set its download form.
-			$execFile = $user_dir . "/.bin/" . $entry;
-			$execFile = str_replace( "\ ", " ", $execFile );
-
-			echo '<form action="scripts/files.php" method="POST" >';
-			echo '<input type="hidden" name="fileName" value="' . $execFile . '" />';
-			echo '<input type="hidden" name="fileAction" value="downloadFile" />';
-			echo '<input type="submit" name="submit" value="Descargar ejecutable (' . $entry . ')" />';
-			echo '</form>';
-		}	
 	}
 
 	/*

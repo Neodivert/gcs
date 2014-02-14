@@ -46,7 +46,7 @@
 	function CreateFile ( $user_dir, $fileName )
 	{
 		// Create the file.
-		$res = fopen( $_SESSION['dir'] . $fileName, "x" );
+		$res = fopen( $_SESSION['dir'] . '/' . $fileName, "x" );
 
 		if( !$res ){
 			$error = error_get_last();
@@ -165,7 +165,7 @@
 	function GetFile( $fileId, $fileName )
 	{
 		// Get complete file path.
-		$filePath = $_SESSION['dir'] . $fileName;
+		$filePath = $_SESSION['dir'] . '/' . $fileName;
 
 		// Open file for reading/writting.
 		$file = fopen( $filePath, "r+" );

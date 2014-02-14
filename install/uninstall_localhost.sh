@@ -29,7 +29,7 @@ fi
 # Retrieve web path and remove the '/' at the end (if exists).
 WEB_PATH=${1%/}
 
-UTILITIES_FILE="${WEB_PATH}/php_html/scripts/utilities.php"
+UTILITIES_FILE="${WEB_PATH}/php/utilities.php"
 if [ ! -f "$UTILITIES_FILE" ]; then
 	printf "ERROR: expected file [%s] not found\n" $UTILITIES_FILE 1>&2
 	exit 1
@@ -75,9 +75,9 @@ echo
 ###############################################################################
 
 # Restart XAMPP
-printf "Restarting XAMPP ...\n"
-sudo ${XAMPP_DIRECTORY}/lampp restart
-printf "Restarting XAMPP ...OK\n"
+printf "Starting MySQL ...\n"
+sudo ${XAMPP_DIRECTORY}/lampp startmysql
+printf "Starting MySQL ...OK\n"
 
 # Get mysql command's path
 mysql="${XAMPP_DIRECTORY}/bin/mysql"

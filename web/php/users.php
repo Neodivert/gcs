@@ -1,28 +1,6 @@
 <?php
 	include_once "utilities.php";
 
-	/*******************************************
-	* Respond to POST Requests
-	*******************************************/
-	// The user wants to logout?
-	if( isset( $_POST['userAction'] ) ){
-		switch( $_POST['userAction'] ){
-			case 'deleteUser':
-				// Delete user from db and delete its dir.
-				DeleteUser( $_SESSION['name'] );
-			case 'logout':
-				// Unset session variables and go to '../index.php'.
-				unset( $_SESSION['name'] );
-				unset( $_SESSION['id'] );
-				unset( $_SESSION['dir'] );
-				header('Location: ../../index.php');
-			break;
-			default:
-				die( 'ERROR: Requested a invalid user action' );
-			break;
-		}
-	}
-
 
 	/*******************************************
 	* Functions
@@ -78,7 +56,7 @@
 		$_SESSION['name'] = $name;
 		$result = mysql_fetch_array($sql);
 		$_SESSION['id'] = $result['id'];
-		$_SESSION['dir'] = $users_dir . $_SESSION['name'] . '/';
+		$_SESSION['dir'] = $users_dir . '/' . $_SESSION['name'];
 			
 		return $_SESSION['id'];
 	}
@@ -110,7 +88,7 @@
 			$_SESSION['name'] = $name;
 			$result = mysql_fetch_array($sql);
 			$_SESSION['id'] = $result['id'];
-			$_SESSION['dir'] = $users_dir . $_SESSION['name'] . '/';
+			$_SESSION['dir'] = $users_dir . '/' . $_SESSION['name'];
 
 			return 1;
 		}else{
