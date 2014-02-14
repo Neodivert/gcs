@@ -72,7 +72,7 @@ function OpenFile( fileName )
 		alert( 'El fichero ya est\u00e1 abierto!' );
 		return;
 	}
-	var url = 'scripts/files.php';
+	var url = 'php/files.php';
 	var parameters = 'fileName='+fileName+'&fileAction=openFile';
 
 	var responseFunction = function(){
@@ -97,7 +97,7 @@ function OpenFile( fileName )
 */
 function CloseFile( fileName )
 {	
-	var url = 'scripts/files.php';
+	var url = 'php/files.php';
 	var parameters = "fileName="+fileName+"&fileAction=closeFile";
 	
 	var responseFunction = function(){
@@ -146,7 +146,7 @@ function AppendFileListItem( fileName, parentList )
 */
 function CreateFile( fileName )
 {
-	var url = 'scripts/files.php';
+	var url = 'php/files.php';
 	var parameters = "fileName="+fileName+"&fileAction=createFile";
 	
 	var responseFunction = function(){
@@ -173,7 +173,7 @@ function DeleteFile( fileName )
 		return;
 	}
 
-	var url = 'scripts/files.php';
+	var url = 'php/files.php';
 	var parameters = "fileName="+fileName+"&fileAction=deleteFile";
 	
 	var responseFunction = function(){
@@ -197,7 +197,7 @@ function DeleteFile( fileName )
 */
 function SaveFile( fileName, textAreaId )
 {
-	var url = 'scripts/files.php';
+	var url = 'php/files.php';
 	var textArea = document.getElementById( textAreaId );
 	var parameters = "fileName="+fileName+"&fileAction=saveFile&fileContent="+textArea.value;
 	

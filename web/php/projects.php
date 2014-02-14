@@ -183,7 +183,7 @@
 		$files = "";
 
 		// Iterate over project's files and add its names to array 'files'.
-		$dir = opendir( $user_dir . $projectName );
+		$dir = opendir( $user_dir . '/' . $projectName );
 
 		// For futher compilation: Shell doesn't like spaces.
 		$projectName = str_replace(" ", "\ ", $projectName );
@@ -208,7 +208,7 @@
 		
 		// Find the main file, that which has "main" function.
 		$mainFile = null;
-		$dir = opendir( $user_dir . $projectName );
+		$dir = opendir( $user_dir . '/' . $projectName );
 
 		if( $dir ){
 			while( ($entry = readdir( $dir )) && !$mainFile ){

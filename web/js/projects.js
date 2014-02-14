@@ -103,7 +103,7 @@ function OpenCompilationDialog( projectName, progLanguageId )
 */
 function CompileProject( projectName, compiler, execName )
 {
-	var url = 'scripts/projects.php';
+	var url = 'php/projects.php';
 	var parameters = "projectName="+projectName;
 	parameters = parameters +'&projectAction=compileProject';
 	
@@ -129,7 +129,7 @@ function CompileProject( projectName, compiler, execName )
 */
 function CreateProject( projectName, progLanguageId )
 {
-	var url = 'scripts/projects.php';
+	var url = 'php/projects.php';
 	var parameters = "projectName="+projectName+"&projectAction=createProject&progLanguageId="+progLanguageId;
 
 	var responseFunction = function(){
@@ -156,7 +156,7 @@ function DeleteProject( projectName )
 	}
 
 	// Prepare POST request.
-	var url = 'scripts/projects.php';
+	var url = 'php/projects.php';
 	var parameters = 'projectName='+projectName+'&projectAction=deleteProject';
 
 	var responseFunction = function(){
@@ -193,7 +193,7 @@ function DeleteProject( projectName )
 */
 function GetCompilers( progLanguageId, compilersList )
 {
-	var url = 'scripts/projects.php';
+	var url = 'php/projects.php';
 	var parameters = "progLanguageId="+progLanguageId;
 
 	var responseFunction = function(){
