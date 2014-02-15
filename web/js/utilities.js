@@ -2,6 +2,8 @@
 	SendPOSTRequest: Send POST parameters 'parameters' to url 'url'. Also set 
 	the function 'responseFunction' as the response's handle.
 */
+var request_url = 'controller.php';
+
 function SendPOSTRequest( url, parameters, responseFunction, async ){
 	// Create a new HTML request.
 	if (window.XMLHttpRequest){

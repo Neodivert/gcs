@@ -103,7 +103,6 @@ function OpenCompilationDialog( projectName, progLanguageId )
 */
 function CompileProject( projectName, compiler, execName )
 {
-	var url = 'php/projects.php';
 	var parameters = "projectName="+projectName;
 	parameters = parameters +'&projectAction=compileProject';
 	
@@ -119,7 +118,7 @@ function CompileProject( projectName, compiler, execName )
 		}
 	}
 
-	SendPOSTRequest( url, parameters, responseFunction );
+	SendPOSTRequest( request_url, parameters, responseFunction );
 }
 
 
@@ -129,7 +128,6 @@ function CompileProject( projectName, compiler, execName )
 */
 function CreateProject( projectName, progLanguageId )
 {
-	var url = 'php/projects.php';
 	var parameters = "projectName="+projectName+"&projectAction=createProject&progLanguageId="+progLanguageId;
 
 	var responseFunction = function(){
@@ -140,7 +138,7 @@ function CreateProject( projectName, progLanguageId )
 		}
 	}
 
-	SendPOSTRequest( url, parameters, responseFunction );
+	SendPOSTRequest( request_url, parameters, responseFunction );
 }
 
 
@@ -156,7 +154,6 @@ function DeleteProject( projectName )
 	}
 
 	// Prepare POST request.
-	var url = 'php/projects.php';
 	var parameters = 'projectName='+projectName+'&projectAction=deleteProject';
 
 	var responseFunction = function(){
@@ -183,7 +180,7 @@ function DeleteProject( projectName )
 		}
 	}
 
-	SendPOSTRequest( url, parameters, responseFunction );
+	SendPOSTRequest( request_url, parameters, responseFunction );
 }
 
 
@@ -193,7 +190,6 @@ function DeleteProject( projectName )
 */
 function GetCompilers( progLanguageId, compilersList )
 {
-	var url = 'php/projects.php';
 	var parameters = "progLanguageId="+progLanguageId;
 
 	var responseFunction = function(){
@@ -202,6 +198,6 @@ function GetCompilers( progLanguageId, compilersList )
 		}
 	}
 
-	SendPOSTRequest( url, parameters, responseFunction, false );
+	SendPOSTRequest( request_url, parameters, responseFunction, false );
 }
 

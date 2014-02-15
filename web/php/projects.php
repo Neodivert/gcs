@@ -3,33 +3,6 @@
 
 
 	/*******************************************
-	* Respond to POST Requests
-	*******************************************/
-	if( isset( $_POST['projectName'] ) ){
-		// Requests related to projects.
-		switch( $_POST['projectAction'] ){
-			case 'compileProject':
-				CompileProject( $_SESSION['dir'], $_POST['projectName'], $_POST['compiler'], $_POST['execName'] );
-			break;
-			case 'createProject':
-				CreateNewProject( $_POST['projectName'], $_POST['progLanguageId'] );
-				ListProjectContent( $_POST['projectName'], $_POST['progLanguageId'] );
-			break;
-			case 'deleteProject':
-				DeleteProject( $_POST['projectName'] );
-			break;
-			default:
-				die( 'ERROR: Requested a invalid project action' );
-			break;
-		}
-	}else if( isset( $_POST['progLanguageId'] ) ){
-		// The client only sends a 'progLanguageId' when he/she wants a
-		// list of available compilers.
-		GetCompilers( $_POST['progLanguageId'] );
-	}
-
-
-	/*******************************************
 	* Functions
 	*******************************************/
 
@@ -247,7 +220,7 @@
 			$execFile = $user_dir . "/.bin/" . $execName;
 			$execFile = str_replace( "\ ", " ", $execFile );
 
-			echo '<form action="scripts/files.php" method="POST" >';
+			echo '<form action="php/controller.php" method="POST" >';
 			echo '<input type="hidden" name="fileName" value="' . $execFile . '" />';
 			echo '<input type="hidden" name="fileAction" value="downloadFile" />';
 			echo '<input type="submit" name="submit" value="Descargar ejecutable (' . $execName . ')" />';
@@ -280,7 +253,7 @@
 				$execFile = $user_dir . "/.bin/" . $entry;
 				$execFile = str_replace( "\ ", " ", $execFile );
 
-				echo '<form action="scripts/files.php" method="POST" >';
+				echo '<form action="php/controller.php" method="POST" >';
 				echo '<input type="hidden" name="fileName" value="' . $execFile . '" />';
 				echo '<input type="hidden" name="fileAction" value="downloadFile" />';
 				echo '<input type="submit" name="submit" value="Descargar ejecutable (' . $entry . ')" />';

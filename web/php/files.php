@@ -3,40 +3,6 @@
 
 
 	/*******************************************
-	* Respond to POST Requests
-	*******************************************/
-	if( isset( $_POST['fileName'] ) ){
-		switch( $_POST['fileAction'] ){
-			case 'downloadFile':
-				DownloadFile( $_POST['fileName'] );
-			break;
-			case 'saveFile':
-				SaveFile( $_SESSION['dir'], $_POST['fileName'], $_POST['fileContent'] ); 
-			break;
-			case 'createFile':
-				CreateFile( $_SESSION['dir'], $_POST['fileName'] );
-				//$fileId = OpenFile( $_SESSION['id'], $_POST['fileName'] );
-				//GetFile( $fileId['id'], $_POST['fileName'] );
-			break;
-			case 'openFile':
-				$fileId = OpenFile( $_SESSION['id'], $_POST['fileName'] );
-				GetFile( $fileId['id'], $_POST['fileName'] );
-			break;
-			case 'closeFile':
-				CloseFile( $_SESSION['id'], $_POST['fileName'] );
-			break;
-			case 'deleteFile':
-				CloseFile( $_SESSION['id'], $_POST['fileName'] );
-				DeleteFile( $_SESSION['dir'], $_POST['fileName'] );
-			break;
-			default:
-				die( 'ERROR: Requested a invalid file action' );
-			break;
-		}
-	}
-
-
-	/*******************************************
 	* Functions
 	*******************************************/
 

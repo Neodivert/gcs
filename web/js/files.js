@@ -72,7 +72,6 @@ function OpenFile( fileName )
 		alert( 'El fichero ya est\u00e1 abierto!' );
 		return;
 	}
-	var url = 'php/files.php';
 	var parameters = 'fileName='+fileName+'&fileAction=openFile';
 
 	var responseFunction = function(){
@@ -88,7 +87,7 @@ function OpenFile( fileName )
 		}
 	}
 	
-	SendPOSTRequest( url, parameters, responseFunction );
+	SendPOSTRequest( request_url, parameters, responseFunction );
 }
 
 
@@ -97,7 +96,6 @@ function OpenFile( fileName )
 */
 function CloseFile( fileName )
 {	
-	var url = 'php/files.php';
 	var parameters = "fileName="+fileName+"&fileAction=closeFile";
 	
 	var responseFunction = function(){
@@ -108,7 +106,7 @@ function CloseFile( fileName )
 		}
 	}
 	
-	SendPOSTRequest( url, parameters, responseFunction );
+	SendPOSTRequest( request_url, parameters, responseFunction );
 }
 
 
@@ -146,7 +144,6 @@ function AppendFileListItem( fileName, parentList )
 */
 function CreateFile( fileName )
 {
-	var url = 'php/files.php';
 	var parameters = "fileName="+fileName+"&fileAction=createFile";
 	
 	var responseFunction = function(){
@@ -158,7 +155,7 @@ function CreateFile( fileName )
 		}
 	}
 	
-	SendPOSTRequest( url, parameters, responseFunction );
+	SendPOSTRequest( request_url, parameters, responseFunction );
 }
 
 
@@ -173,7 +170,6 @@ function DeleteFile( fileName )
 		return;
 	}
 
-	var url = 'php/files.php';
 	var parameters = "fileName="+fileName+"&fileAction=deleteFile";
 	
 	var responseFunction = function(){
@@ -188,7 +184,7 @@ function DeleteFile( fileName )
 		}
 	}
 	
-	SendPOSTRequest( url, parameters, responseFunction );
+	SendPOSTRequest( request_url, parameters, responseFunction );
 }
 
 
@@ -197,7 +193,6 @@ function DeleteFile( fileName )
 */
 function SaveFile( fileName, textAreaId )
 {
-	var url = 'php/files.php';
 	var textArea = document.getElementById( textAreaId );
 	var parameters = "fileName="+fileName+"&fileAction=saveFile&fileContent="+textArea.value;
 	
@@ -207,5 +202,5 @@ function SaveFile( fileName, textAreaId )
 		}
 	}
 	
-	SendPOSTRequest( url, parameters, responseFunction );
+	SendPOSTRequest( request_url, parameters, responseFunction );
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html> 
 <?php
+	include_once "php/users.php";
 	include_once "php/projects.php";
 	include_once "php/files.php";
 
