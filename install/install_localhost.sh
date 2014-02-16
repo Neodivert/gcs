@@ -25,28 +25,6 @@ function remove_last_slash(){
 }
 
 
-function get_user_mysql_password(){
-	local mysql_password
-
-	user_msg="Write your database administrative password (Used for login in phpmyadmin): "
-
-	read -e -s -r -p "$user_msg" mysql_password
-	printf "\n"
-	
-	$1 -u root --password=$mysql_password -e "exit" >/dev/null 2>&1
-	while [[ $? -ne 0 ]] ;
-	do
-		printf "Wrong password\n"
-		read -e -s -r -p "$user_msg" mysql_password
-		printf "\n"
-
-		$1 -u root --password=$mysql_password -e "exit" >/dev/null 2>&1
-	done
-
-	echo "$mysql_password"
-}
-
-
 # Step 0: Check if we have root privileges.
 ###############################################################################
 
