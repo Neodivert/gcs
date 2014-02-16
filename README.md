@@ -4,6 +4,10 @@ GCS - Online Compiler
 ## About
 GCS is a website which allows users to create and compile multi-platform C/C++ programming projects.
 
+## Authors
+All the code except the one listed in next "Third-party" libraries was done by:
+* Moisés J. Bonilla Caraballo.
+* Garoe Dorta Pérez (https://github.com/Garoe).
 
 ## Dependencies
 
@@ -18,7 +22,16 @@ GCS also needs the following packets (found in the repositories for Ubuntu) for 
 * mingw-w64-x86-64 : Cross-compiling to Windows (64 bits)
 
 
+## Third-party libraries
+
+GCS makes use of the following third-party libraries:
+* jQuery 1.7.2 (http://jquery.com/)
+* jQuery UI 1.8.20 (https://jqueryui.com/)
+* md5 2.2 (http://pajhome.org.uk/crypt/md5/)
+
 ## Automatic instalation (localhost)
+
+* Install dependencies listed in previous "Dependencies" section.
 
 * Clone this repository.
 ```
@@ -44,4 +57,16 @@ cs gcs/install
 * Execute installer and follow instructions.
 ```
 ./install_localhost.sh
+```
+
+## Automatic uninstallation (localhost)
+
+* cd to install directory
+```
+cs gcs/install
+```
+
+* Execute uninstall script and follow instructions.
+```
+./uninstall_localhost.sh
 ```
