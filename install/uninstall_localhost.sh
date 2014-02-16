@@ -66,22 +66,24 @@ then
 	exit 1
 fi
 
-# Ask the user for him/her administrative MySQL password.
-read -e -s -p "Write your database administrative password (Used for login in phpmyadmin): " MYSQL_PASSWORD
-echo
-# TODO: Check password.
 
-
-# Step 5: Database uninstall
-###############################################################################
-
-# Restart XAMPP
-printf "Starting MySQL ...\n"
-sudo ${XAMPP_DIRECTORY}/lampp startmysql
-printf "Starting MySQL ...OK\n"
+# Step 5: Ask the user for him/her administrative MySQL password.
+############################################################################### 
 
 # Get mysql command's path
 mysql="${XAMPP_DIRECTORY}/bin/mysql"
+
+# Ask the user for him/her administrative MySQL password.
+MYSQL_PASSWORD=`get_user_mysql_password "$mysql"`
+
+
+# Step 6: Database uninstall
+###############################################################################
+
+# Start XAMPP MySQL
+printf "Starting MySQL ...\n"
+sudo ${XAMPP_DIRECTORY}/lampp startmysql
+printf "Starting MySQL ...OK\n"
 
 # Delete MySQL user.
 printf "Deleting MySQL user [%s] ...\n" "${DB_USER_NAME}"
