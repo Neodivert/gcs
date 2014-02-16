@@ -148,6 +148,42 @@
 	}
 
 
+	function GetValidSourceExtension( $projectName )
+	{
+		$db_connection = ConnectToDB();
+		
+		$res = mysql_query("SELECT source_extension FROM progLanguages,projects WHERE projects.name='$projectName' AND projects.progLanguageId=progLanguages.id") or die (mysql_error());
+
+		$progLanguage = mysql_fetch_array( $res );
+
+		
+		mysql_close( $db_connection );
+
+		return $progLanguage['source_extension'];
+	}
+
+
+	function GetValidHeaderExtension( $projectName )
+	{
+		$db_connection = ConnectToDB();
+		
+		$res = mysql_query("SELECT header_extension FROM progLanguages,projects WHERE projects.name='$projectName' AND projects.progLanguageId=progLanguages.id") or die (mysql_error());
+
+		$progLanguage = mysql_fetch_array( $res );
+
+		
+		mysql_close( $db_connection );
+
+		return $progLanguage['header_extension'];
+	}
+
+
+	function FileHasExtension( $file, $ext )
+	{
+		return ( substr_compare( $file, $ext, -strlen( $ext ), strlen( $ext ) ) === 0 );
+	}
+
+
 	/*
 		CompileProject: Try to compile the project 'projecName' located in
 		'user_dir' with compiler 'compiler'. Name the resulting executable as
@@ -178,23 +214,37 @@
 
 		closedir( $dir );
 		
-		$compiler = str_replace( '@', '+', $compiler ); 
-		
-		// Find the main file, that which has "main" function.
+		$compiler = str_replace( '@', '+', $compiler );
+
+		// Get the valid header and source extensions for the current used 
+		// programming language.
+		$source_extension = GetValidSourceExtension( $projectName );
+		$header_extension = GetValidHeaderExtension( $projectName );
+
+		// List source files and check if the main file exists (that which has 
+		// "main" function).
 		$mainFile = null;
 		$dir = opendir( $user_dir . '/' . $projectName );
+		$source_files = '';
 
 		if( $dir ){
-			while( ($entry = readdir( $dir )) && !$mainFile ){
+			while( ($entry = readdir( $dir ) ) ){
 				if( ($entry !== ".." ) && ($entry !== "." ) ){
 					echo '<!--';
-					if( ! system( 'cat ' . $user_dir . $projectName . '/' . $entry . ' | grep main' ) ){
+					if( ! system( 'cat ' . $user_dir . '/' . $projectName . '/' . $entry . ' | grep main' ) ){
 						$mainFile = $entry;
 					}
 					echo '-->';
+					if( FileHasExtension( $entry, $source_extension ) ){
+						$source_files = $source_files . " $entry";
+					}else if( !FileHasExtension( $entry, $header_extension ) ){
+						die( "ERROR: file [$entry] hasn't got a valid extension - valid extensions: [$header_extension, $source_extension]" );
+					}
 				}
 			}
 		}
+
+		echo "Source files: [$source_files]\n";
 
 		if( !$mainFile ){
 			die( 'ERROR: No hay ningun fichero con la funcion "main"' );
@@ -210,7 +260,7 @@
 		
 		// Try to compile the project. The '2>&1' redirects errors to standard 
 		// output, so we can take it in $output.
-		$output = system( "sh -c \"$compiler -o ../.bin/$execName $mainFile 2>&1\"", $returnValue );
+		$output = system( "sh -c \"$compiler -o ../.bin/$execName $source_files 2>&1\"", $returnValue );
 
 		// Change to previous dir.
 		chdir( $lastDir );

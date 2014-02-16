@@ -39,6 +39,7 @@
 			break;
 			case 'createFile':
 				CreateFile( $_SESSION['dir'], $_POST['fileName'] );
+			break;
 			case 'openFile':
 				$fileId = OpenFile( $_SESSION['id'], $_POST['fileName'] );
 				GetFile( $fileId['id'], $_POST['fileName'] );

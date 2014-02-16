@@ -28,7 +28,7 @@
 	*/
 	function DeleteFile( $user_dir, $fileName )
 	{
-		$res = unlink( $user_dir . $fileName );
+		$res = unlink( $user_dir . '/' . $fileName );
 
 		if( !$res ){
 			$error = error_get_last();
