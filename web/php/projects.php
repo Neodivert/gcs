@@ -156,7 +156,7 @@
 		$files = "";
 
 		// Iterate over project's files and add its names to array 'files'.
-		$dir = opendir( $user_dir . '/' . $projectName );
+		//$dir = opendir( $user_dir . '/' . $projectName );
 
 		// For futher compilation: Shell doesn't like spaces.
 		$projectName = str_replace(" ", "\ ", $projectName );
@@ -187,7 +187,7 @@
 			while( ($entry = readdir( $dir )) && !$mainFile ){
 				if( ($entry !== ".." ) && ($entry !== "." ) ){
 					echo '<!--';
-					if( system( 'cat ' . $user_dir . $projectName . '/' . $entry . ' | grep main' ) ){
+					if( ! system( 'cat ' . $user_dir . $projectName . '/' . $entry . ' | grep main' ) ){
 						$mainFile = $entry;
 					}
 					echo '-->';
@@ -202,15 +202,14 @@
 		// Change current dir to source dir, so compiler can follow relative
 		// paths.
 		$lastDir = getcwd();
-		chdir( $user_dir . $projectName );
 
-		if( !chdir( $user_dir . $projectName ) ){ 
-			die( 'Error cambiando a directorio [' . $user_dir . $projectName . ']' );
+		if( !chdir( $user_dir . '/' . $projectName ) ){ 
+			die( 'Error cambiando a directorio [' . $user_dir . '/' . $projectName . ']' );
 		}
 		
 		// Try to compile the project. The '2>&1' redirects errors to standard 
 		// output, so we can take it in $output.
-		$output = system( "sh -c '" . $compiler . " -o " . $user_dir . "/.bin/" . $execName . " " . $mainFile . " 2>&1'", $returnValue );
+		$output = system( "sh -c \"$compiler -o ../.bin/$execName $mainFile 2>&1\"", $returnValue );
 
 		// Change to previous dir.
 		chdir( $lastDir );
@@ -220,7 +219,7 @@
 			$execFile = $user_dir . "/.bin/" . $execName;
 			$execFile = str_replace( "\ ", " ", $execFile );
 
-			echo '<form action="php/controller.php" method="POST" >';
+			echo '<form action="controller.php" method="POST" >';
 			echo '<input type="hidden" name="fileName" value="' . $execFile . '" />';
 			echo '<input type="hidden" name="fileAction" value="downloadFile" />';
 			echo '<input type="submit" name="submit" value="Descargar ejecutable (' . $execName . ')" />';

@@ -69,6 +69,7 @@ fi
 # Ask the user for him/her administrative MySQL password.
 read -e -s -p "Write your database administrative password (Used for login in phpmyadmin): " MYSQL_PASSWORD
 echo
+# TODO: Check password.
 
 
 # Step 5: Database uninstall

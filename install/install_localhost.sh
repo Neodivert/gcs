@@ -25,6 +25,28 @@ function remove_last_slash(){
 }
 
 
+function get_user_mysql_password(){
+	local mysql_password
+
+	user_msg="Write your database administrative password (Used for login in phpmyadmin): "
+
+	read -e -s -r -p "$user_msg" mysql_password
+	echo
+	
+	$1 -u root --password=$mysql_password -e "exit" >/dev/null 2>&1
+	while [[ $? -ne 0 ]] ;
+	do
+		printf "Wrong password\n"
+		read -e -s -r -p "$user_msg" mysql_password
+		echo
+
+		$1 -u root --password=$mysql_password -e "exit" >/dev/null 2>&1
+	done
+
+	echo "$mysql_password"
+}
+
+
 # Step 0: Check if we have root privileges.
 ###############################################################################
 
@@ -109,7 +131,13 @@ printf "Starting MySQL ...OK\n"
 mysql="${XAMPP_DIRECTORY}/bin/mysql"
 
 
-# Step 6: Check if a MYSQL database and/or user with the given names already 
+# Step 6: Ask the user for him/her administrative MySQL password.
+###############################################################################
+# Ask the user for him/her administrative MySQL password.
+MYSQL_PASSWORD=`get_user_mysql_password "$mysql"`
+
+
+# Step 7: Check if a MYSQL database and/or user with the given names already 
 # exist.
 ###############################################################################
 
@@ -127,12 +155,8 @@ if [[ ! -z "`$mysql -u root --password=${MYSQL_PASSWORD} -e "SELECT 1 FROM mysql
 fi
 
 
-# Step 7: Database instalation
+# Step 8: Database instalation
 ###############################################################################
-
-# Ask the user for him/her administrative MySQL password.
-read -e -s -p "Write your database administrative password (Used for login in phpmyadmin): " -i "${default_config[MYSQL_PASSWORD]}" MYSQL_PASSWORD
-echo
 
 # Ask the user for a password for the database user.
 read -e -s -p "Write a password for the GCS database user: " DB_USER_PASSWORD
@@ -162,7 +186,7 @@ $mysql -u root --password="${MYSQL_PASSWORD}" -e "GRANT ${DB_USER_PRIVILEGES} ON
 printf "Giving [%s] privileges to user [%s] ...OK\n" "${DB_USER_PRIVILEGES}" "${DB_USER_NAME}"
 
 
-# Step 8: Directory instalation
+# Step 9: Directory instalation
 ###############################################################################
 
 printf "Copying web content to [%s] ...\n" "${WEB_PATH}"
@@ -181,7 +205,7 @@ sudo sed -i "s/~~DB_NAME~~/'${DB_NAME}'/g" "$utilities_file"
 printf "Personalizing web configuration ...OK\n"
 
 
-# Step 9: Done!
+# Step 10: Done!
 ###############################################################################
 
 printf "\n\nInstall finished. Now you can visit \"localhost/$WEB_NAME\"\n\n"
@@ -228,4 +252,10 @@ exit 0
 #
 # PHP mkdir: Permission denied problem - Stack Overflow
 # http://stackoverflow.com/questions/5246114/php-mkdir-permission-denied-problem
+#
+# Catching user input - Bash Guide for Beginners
+# http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_08_02.html
+#
+# Returning Values from Bash Functions - Linux Journal
+# http://www.linuxjournal.com/content/return-values-bash-functions
 ###############################################################################
