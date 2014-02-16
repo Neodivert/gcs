@@ -56,7 +56,7 @@ printf " - Delete MySQL user [%s]\n" $DB_USER_NAME
 printf "	- DELETE ENTIRE DIRECTORY (INCLUDING USERS CONTENT DIRECTORY) [%s]\n\n" $WEB_PATH
 
 # Ask user for permission.
-read -p "Install? (y/n): " -n 1 -r
+read -p "Uninstall? (y/n): " -n 1 -r
 
 # Exit if user didn't give us confirmation.
 echo # Move to a new line

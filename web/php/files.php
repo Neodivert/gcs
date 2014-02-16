@@ -125,7 +125,7 @@
 
 
 	/*
-		GetFileByRecord: Return the content of file 'fileName' with id 'fileId',
+		GetFile: Return the content of file 'fileName' with id 'fileId',
 		with buttons for saving a closing the file.
 	*/
 	function GetFile( $fileId, $fileName )
@@ -162,7 +162,7 @@
 
 			$function = "CloseFile('" . $fileName . "')";
 			CreateButton( 'Cerrar Fichero', $function );
-		}	
+		}
 	}
 
 
