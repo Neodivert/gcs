@@ -75,6 +75,8 @@ CREATE TABLE IF NOT EXISTS `openFiles` (
 CREATE TABLE IF NOT EXISTS `progLanguages` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(10) NOT NULL,
+  `header_extension` varchar(10) NOT NULL,
+  `source_extension` varchar(10) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
@@ -83,9 +85,9 @@ CREATE TABLE IF NOT EXISTS `progLanguages` (
 -- Volcado de datos para la tabla `progLanguages`
 --
 
-INSERT INTO `progLanguages` (`id`, `name`) VALUES
-(2, 'C'),
-(3, 'C++');
+INSERT INTO `progLanguages` (`id`, `name`, `header_extension`, `source_extension`) VALUES
+(2, 'C', '.h', '.c'),
+(3, 'C++', '.hpp', '.cpp');
 
 -- --------------------------------------------------------
 

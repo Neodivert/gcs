@@ -146,7 +146,8 @@
 
 		mysql_close( $db_connection );
 	}
-	
+
+
 	/*
 		CompileProject: Try to compile the project 'projecName' located in
 		'user_dir' with compiler 'compiler'. Name the resulting executable as
