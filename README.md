@@ -25,6 +25,17 @@ GCS also needs the following packets (found in the repositories for Ubuntu) for 
 git clone git@github.com:Neodivert/gcs
 ```
 
+* cd to gcs directory
+```
+cs gcs
+```
+
+* Initialize and update repository's submodules
+```
+git submodule init
+git submodule update
+```
+
 * cd to install directory
 ```
 cs gcs/install
