@@ -216,14 +216,7 @@
 
 		if( $returnValue == 0 ){
 			// Compilation successful, create a button for downloading exec.
-			$execFile = $user_dir . "/.bin/" . $execName;
-			$execFile = str_replace( "\ ", " ", $execFile );
-
-			echo '<form action="controller.php" method="POST" >';
-			echo '<input type="hidden" name="fileName" value="' . $execFile . '" />';
-			echo '<input type="hidden" name="fileAction" value="downloadFile" />';
-			echo '<input type="submit" name="submit" value="Descargar ejecutable (' . $execName . ')" />';
-			echo '</form>';
+			GetLastExecutable( $user_dir );
 		}
 		
 		// Show the compilation's result.
@@ -252,7 +245,7 @@
 				$execFile = $user_dir . "/.bin/" . $entry;
 				$execFile = str_replace( "\ ", " ", $execFile );
 
-				echo '<form action="php/controller.php" method="POST" >';
+				echo '<form action="controller.php" method="POST" >';
 				echo '<input type="hidden" name="fileName" value="' . $execFile . '" />';
 				echo '<input type="hidden" name="fileAction" value="downloadFile" />';
 				echo '<input type="submit" name="submit" value="Descargar ejecutable (' . $entry . ')" />';

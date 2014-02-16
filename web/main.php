@@ -8,28 +8,6 @@
 	if( !isset( $_SESSION['name'] ) ){
 		die( 'ERROR: Debe logearse/registrarse para entrar en esta secci&oacute;n' );
 	}
-
-	/*******************************************
-	* Respond to POST Requests
-	*******************************************/
-	// The user wants to logout?
-	if( isset( $_POST['userAction'] ) ){
-		switch( $_POST['userAction'] ){
-			case 'deleteUser':
-				// Delete user from db and delete its dir.
-				DeleteUser( $_SESSION['name'] );
-			case 'logout':
-				// Unset session variables and go to '../index.php'.
-				unset( $_SESSION['name'] );
-				unset( $_SESSION['id'] );
-				unset( $_SESSION['dir'] );
-				header('Location: index.php');
-			break;
-			default:
-				die( 'ERROR: Requested a invalid user action' );
-			break;
-		}
-	}
 ?>
 
 <html>
@@ -64,12 +42,12 @@
 				<p>Bienvenido <?php echo $_SESSION['name'] . " (id: " . $_SESSION['id'] . ")"; ?> </p>
 				
 				<!-- Logout form -->
-				<form id="logoutForm" action="main.php" method="post">
+				<form id="logoutForm" action="controller.php" method="post">
 					<input type="submit" name="userAction" value="logout" />
 				</form>
 
 				<!-- Delete user form -->
-				<form id="deleteUserForm" action="main.php" method="post">
+				<form id="deleteUserForm" action="controller.php" method="post">
 					<input type="hidden" name="userAction" value="deleteUser" />
 					<?php
 					echo '<input type="button" name="userAction" value="Borrar usuario"';
