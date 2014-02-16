@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# TODO: Load only phpmyadmin path
-source config.cfg
-
-# Step 0: Check if we have root privileges.
+# Step 0: Check if we have root privileges and load configuration file.
 ###############################################################################
 
 if [ "$(whoami)" != "root" ]; then
@@ -11,6 +8,7 @@ if [ "$(whoami)" != "root" ]; then
 	exit 1
 fi
 
+source config.cfg
 
 # Step 1: Check if user gave us an argument (as expected)
 ###############################################################################
@@ -74,7 +72,8 @@ fi
 mysql="${XAMPP_DIRECTORY}/bin/mysql"
 
 # Ask the user for him/her administrative MySQL password.
-MYSQL_PASSWORD=`get_user_mysql_password "$mysql"`
+MYSQL_PASSWORD=`./install_utilities/src/get_mysql_user_password.sh "$mysql"`
+printf "\n"
 
 
 # Step 6: Database uninstall

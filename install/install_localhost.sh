@@ -112,7 +112,8 @@ mysql="${XAMPP_DIRECTORY}/bin/mysql"
 # Step 6: Ask the user for him/her administrative MySQL password.
 ###############################################################################
 # Ask the user for him/her administrative MySQL password.
-MYSQL_PASSWORD=`get_user_mysql_password "$mysql"`
+MYSQL_PASSWORD=`./install_utilities/src/get_mysql_user_password.sh "$mysql"`
+printf "\n"
 
 
 # Step 7: Check if a MYSQL database and/or user with the given names already 
