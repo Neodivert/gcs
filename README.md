@@ -1,5 +1,4 @@
-GCS - Online Compiler
-===
+# GCS - Online Compiler
 
 ## About
 GCS is a website which allows users to create and compile multi-platform C/C++ programming projects.
@@ -31,42 +30,44 @@ GCS makes use of the following third-party libraries:
 
 ## Automatic instalation (localhost)
 
-* Install dependencies listed in previous "Dependencies" section.
+1. Install dependencies listed in previous "Dependencies" section.
 
-* Clone this repository.
-```
-git clone git@github.com:Neodivert/gcs
-```
+2. Clone this repository.
+ ```
+ git clone git@github.com:Neodivert/gcs
+ ```
 
-* cd to gcs directory
-```
-cs gcs
-```
+3. cd to gcs directory
+ ```
+ cs gcs
+ ```
 
-* Initialize and update repository's submodules
-```
-git submodule init
-git submodule update
-```
+4. Initialize and update repository's submodules
+ ```
+ git submodule init
+ git submodule update
+ ```
 
-* cd to install directory
-```
-cs gcs/install
-```
+5. cd to install directory
+ ```
+ cs gcs/install
+ ```
 
-* Execute installer and follow instructions.
-```
-./install_localhost.sh
-```
+6. Execute installer and follow instructions.
+ ```
+ ./install_localhost.sh
+ ```
 
 ## Automatic uninstallation (localhost)
 
-* cd to install directory
-```
-cs gcs/install
-```
+1. cd to install directory
 
-* Execute uninstall script and follow instructions.
-```
-./uninstall_localhost.sh
-```
+ ```
+ cs gcs/install
+ ```
+
+2. Execute uninstall script and follow instructions.
+
+ ```
+ ./uninstall_localhost.sh
+ ```
