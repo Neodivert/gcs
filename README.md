@@ -3,6 +3,10 @@
 ## About
 GCS is a website which allows users to create and compile multi-platform C/C++ programming projects.
 
+## Current status
+
+Project functional, **but inactive and pottentially unsafe for its use in production**.
+
 ## Authors
 All the code except the one listed in next "Third-party" libraries was done by:
 * Moisés J. Bonilla Caraballo.
