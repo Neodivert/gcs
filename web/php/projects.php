@@ -267,7 +267,7 @@
 
 		echo "Source files: [$source_files]\n";
 
-		if( !$mainFile ){
+		if( $mainFile != null ){
 			die( 'ERROR: No hay ningun fichero con la funcion "main"' );
 		}
 
