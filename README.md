@@ -73,5 +73,5 @@ GCS makes use of the following third-party libraries:
 2. Execute uninstall script and follow instructions.
 
  ```
- ./uninstall_localhost.sh
+ sudo ./uninstall_localhost.sh
  ```
