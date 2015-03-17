@@ -38,7 +38,7 @@ GCS makes use of the following third-party libraries:
 
 2. Clone this repository.
  ```
- git clone git@github.com:Neodivert/gcs
+ git clone git@github.com:moisesjbc/gcs
  ```
 
 3. cd to gcs directory
@@ -54,7 +54,7 @@ GCS makes use of the following third-party libraries:
 
 5. cd to install directory
  ```
- cs gcs/install
+ cs install
  ```
 
 6. Execute installer and follow instructions.
