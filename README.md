@@ -59,7 +59,7 @@ GCS makes use of the following third-party libraries:
 
 6. Execute installer and follow instructions.
  ```
- ./install_localhost.sh
+ sudo ./install_localhost.sh
  ```
 
 ## Automatic uninstallation (localhost)
