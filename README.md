@@ -1,5 +1,7 @@
 # GCS - Online Compiler
 
+![GCS screenshot](img/gcs.png "GCS screenshot")
+
 ## About
 GCS is a website which allows users to create and compile multi-platform C/C++ programming projects.
 
